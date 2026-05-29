@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SignApp - Traductor en Vivo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 text-gray-800">
+    <div class="flex min-h-screen">
+
+        <aside id="sidebar" class="w-56 bg-white border-r border-gray-200 flex flex-col fixed h-full"></aside>
+
+        <main class="ml-56 flex-1 p-8">
+            <h1 class="text-2xl font-bold mb-6">Traductor de Señas</h1>
+
+            <div class="grid grid-cols-2 gap-5">
+
+                <div
+                    class="bg-white rounded-xl border border-gray-200 p-3 relative min-h-[400px] flex items-center justify-center">
+                    <img id="video-stream" src="http://127.0.0.1:5000/api/video_feed" alt="Video"
+                        class="w-full rounded-lg scale-x-[-1]">
+                </div>
+
+                <div class="bg-white rounded-xl border border-gray-200 p-6 flex flex-col gap-4">
+                    <p class="text-xs font-bold uppercase tracking-widest text-gray-400">Palabra Detectada</p>
+                    <div id="gesture-display"
+                        class="bg-gray-50 border-2 border-dashed border-gray-300 rounded-xl py-10 text-center text-3xl font-extrabold text-indigo-600">
+                        Detectando...
+                    </div>
+                    <div>
+                        <p class="text-sm font-semibold text-gray-400 mb-2">Algunas señas que puedes hacer:</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span
+                                class="bg-gray-100 border border-gray-200 text-gray-700 text-xs px-3 py-1 rounded-lg">Hola
+                                (Mano abierta)</span>
+                            <span
+                                class="bg-gray-100 border border-gray-200 text-gray-700 text-xs px-3 py-1 rounded-lg">No
+                                (Puño cerrado)</span>
+                            <span
+                                class="bg-gray-100 border border-gray-200 text-gray-700 text-xs px-3 py-1 rounded-lg">Sí
+                                (Pulgar arriba)</span>
+                            <span
+                                class="bg-gray-100 border border-gray-200 text-gray-700 text-xs px-3 py-1 rounded-lg">Gracias
+                                (2 dedos)</span>
+                            <span
+                                class="bg-gray-100 border border-gray-200 text-gray-700 text-xs px-3 py-1 rounded-lg">Ayuda
+                                (3 dedos)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="components/sidebar.js"></script>
+    <script src="js/script.js"></script>
+    <script>
+        loadSidebar('traductor');
+        setMode('words');
+    </script>
+</body>
+
+</html>
