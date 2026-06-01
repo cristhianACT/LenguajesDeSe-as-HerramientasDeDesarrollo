@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SignApp - Formar Frases</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+    <div class="flex min-h-screen">
+        <aside id="sidebar" class="w-56 bg-white border-r border-gray-200 flex flex-col fixed h-full"></aside>
+
+        <main class="ml-56 flex-1 p-8">
+            <h1 class="text-2xl font-bold mb-6">Formar Frases y Hablar</h1>
+
+            <div class="grid grid-cols-2 gap-5">
+                <!-- Cámara -->
+                <div class="bg-white rounded-xl border border-gray-200 p-3 relative min-h-[400px] flex items-center justify-center">
+                    <img id="video-stream" src="http://127.0.0.1:5000/api/video_feed" alt="Video" class="w-full rounded-lg scale-x-[-1]">
+                    <div class="absolute bottom-3 left-1/2 -translate-x-1/2 bg-white border border-gray-200 shadow rounded-full px-4 py-1.5 flex items-center gap-2">
+                        <span class="text-xs font-bold uppercase text-gray-400">Detectando:</span>
+                        <strong id="gesture-display" class="text-indigo-600 font-extrabold text-sm">...</strong>
+                    </div>
+                </div>
+
+                <!-- Constructor de Frases -->
+                <div class="bg-white rounded-xl border border-gray-200 p-5 flex flex-col gap-4">
+                    <h2 class="text-lg font-bold text-gray-800">Texto Construido</h2>
+                    <p class="text-sm text-gray-400">Mantén una letra sostenida por 2 segundos para añadirla. Usa los botones para espacios o borrar.</p>
+                    
+                    <textarea id="texto-frase" class="w-full flex-1 p-4 border border-gray-200 rounded-lg text-4xl font-bold resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" placeholder="..."></textarea>
+                    
+                    <div class="flex gap-3">
+                        <button id="btn-espacio" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-3 rounded-lg transition">Espacio</button>
+                        <button id="btn-borrar" class="bg-red-100 hover:bg-red-200 text-red-600 font-bold py-3 px-4 rounded-lg transition">Borrar</button>
+                    </div>
+                    
+                    <button id="btn-hablar" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-lg transition flex justify-center items-center gap-2 text-lg mt-2 shadow-lg shadow-indigo-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5 10v4a2 2 0 002 2h3l4 4V4L10 8H7a2 2 0 00-2 2z" /></svg>
+                        Hablar Frase
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="components/sidebar.js"></script>
+    <script src="js/frases.js"></script>
+    <script>
+        loadSidebar('frases');
+        setMode('letters');
+    </script>
+</body>
+</html>
