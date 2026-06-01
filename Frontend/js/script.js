@@ -1,46 +1,43 @@
-const gestureDisplay = document.getElementById('gesture-display');
-const connectionStatus = document.getElementById('connection-status');
+const el = id => document.getElementById(id);
+const gestureDisplay = el('gesture-display');
+const connectionStatus = el('connection-status');
 
-async function fetchCurrentGesture() {
+const updateStatus = (text, color) => {
+    connectionStatus.innerText = text;
+    connectionStatus.style.color = color;
+};
+
+const fetchCurrentGesture = async () => {
     try {
-        const response = await fetch('http://127.0.0.1:5000/api/current_gesture');
-        if (!response.ok) throw new Error("Error en red");
+        const res = await fetch('http://127.0.0.1:5000/api/current_gesture');
+        if (!res.ok) throw new Error();
 
-        const data = await response.json();
-
-        if (data.gesture !== "Ninguno" && data.gesture !== gestureDisplay.innerText) {
-            gestureDisplay.innerText = data.gesture;
-
-            gestureDisplay.style.transform = "scale(1.05)";
-            setTimeout(() => {
-                gestureDisplay.style.transform = "scale(1)";
-            }, 200);
-        } else if (data.gesture === "Ninguno") {
+        const { gesture } = await res.json();
+        
+        if (gesture === "Ninguno") {
             gestureDisplay.innerText = "Detectando...";
+        } else if (gesture !== gestureDisplay.innerText) {
+            gestureDisplay.innerText = gesture;
+            gestureDisplay.style.transform = "scale(1.05)";
+            setTimeout(() => gestureDisplay.style.transform = "scale(1)", 200);
         }
 
-        connectionStatus.innerText = "Conectado";
-        connectionStatus.style.color = "#10b981";
-
-    } catch (error) {
-        console.error("Error obteniendo gesto:", error);
-        connectionStatus.innerText = "Desconectado";
-        connectionStatus.style.color = "#ef4444";
+        updateStatus("Conectado", "#10b981");
+    } catch (e) {
+        updateStatus("Desconectado", "#ef4444");
     }
-}
+};
 
 setInterval(fetchCurrentGesture, 500);
 
-async function setMode(mode) {
+const setMode = async mode => {
     try {
         await fetch('http://127.0.0.1:5000/api/set_mode', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ mode: mode })
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ mode })
         });
-    } catch (error) {
-        console.error("Error configurando el modo:", error);
+    } catch (e) {
+        console.error("Error configurando modo:", e);
     }
-}
+};
