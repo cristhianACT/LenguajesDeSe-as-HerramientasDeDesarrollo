@@ -32,6 +32,11 @@ class SignDetector:
         # Delegamos la lógica de detección de gestos al Engine
         self.gesture_engine = GestureEngine()
 
+        # Métricas de uso
+        self.total_detections = 0
+        self.last_detected_gesture = "Ninguno"
+        self.last_detection_time = None
+
     def set_mode(self, mode):
         self.mode = mode
 
@@ -70,8 +75,16 @@ class SignDetector:
                 lm_list.append([i, int(lm.x * w), int(lm.y * h)])
 
         # Actualizar el gesto global usando el Motor de Gestos
-        self.current_gesture = self.gesture_engine.recognize(lm_list, self.mode)
+        new_gesture = self.gesture_engine.recognize(lm_list, self.mode)
+        self.current_gesture = new_gesture
         
+        if new_gesture and new_gesture != "Ninguno" and new_gesture != "Detectando..." and new_gesture != "Detectando número...":
+            if new_gesture != self.last_detected_gesture:
+                from datetime import datetime
+                self.total_detections += 1
+                self.last_detected_gesture = new_gesture
+                self.last_detection_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
         cv2.putText(img, f'Gesto: {self.current_gesture}', (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
         
         return img
