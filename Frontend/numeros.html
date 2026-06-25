@@ -35,12 +35,134 @@
                     </div>
                 </div>
 
-                <div class="bg-white rounded-xl border border-gray-200 p-5 flex flex-col gap-3">
-                    <h2 class="text-lg font-bold text-gray-800">Números del 0 al 10</h2>
-                    <p class="text-sm text-gray-400">Imita las señas con tu mano</p>
-                    <div class="overflow-y-auto rounded-lg border border-gray-100" style="max-height: 460px;">
-                        <img src="assets/numeros.jpg" alt="Números en Lenguaje de Señas"
-                            class="w-full h-auto rounded-lg">
+                <div class="bg-white rounded-xl border border-gray-200 flex flex-col overflow-hidden">
+                    <!-- Tabs -->
+                    <div class="flex border-b border-gray-200 bg-gray-50">
+                        <button id="tab-aprender"
+                            class="flex-1 py-3 text-sm font-semibold text-indigo-600 border-b-2 border-indigo-600">Aprender</button>
+                        <button id="tab-practicar"
+                            class="flex-1 py-3 text-sm font-medium text-gray-500 hover:text-gray-700">Práctica</button>
+                        <button id="tab-reto"
+                            class="flex-1 py-3 text-sm font-medium text-gray-500 hover:text-gray-700">Reto</button>
+                        <button id="tab-estadisticas"
+                            class="flex-1 py-3 text-sm font-medium text-gray-500 hover:text-gray-700">Estadísticas</button>
+                    </div>
+
+                    <div class="p-5 flex-1 overflow-y-auto" style="max-height: 500px;">
+                        <!-- Aprender -->
+                        <div id="seccion-aprender" class="flex flex-col gap-3">
+                            <h2 class="text-lg font-bold text-gray-800">Números del 0 al 10</h2>
+                            <p class="text-sm text-gray-400">Imita las señas con tu mano</p>
+                            <div class="rounded-lg border border-gray-100">
+                                <img src="assets/numeros.jpg" alt="Números en Lenguaje de Señas"
+                                    class="w-full h-auto rounded-lg">
+                            </div>
+                        </div>
+
+                        <!-- Práctica -->
+                        <div id="seccion-practicar" class="hidden flex-col gap-4">
+                            <h2 class="text-lg font-bold text-gray-800">Modo Práctica</h2>
+                            <div class="bg-indigo-50 p-6 rounded-xl text-center border border-indigo-100">
+                                <p class="text-sm text-indigo-600 font-medium mb-2">Haz el número:</p>
+                                <div id="numero-solicitado" class="text-6xl font-extrabold text-indigo-700 mb-4">?</div>
+                                <div id="resultado-practica" class="h-8 text-lg font-bold"></div>
+                            </div>
+                            <button id="btn-nuevo-numero"
+                                class="w-full py-2.5 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition">Número
+                                Nuevo</button>
+
+                            <div class="grid grid-cols-2 gap-4 mt-2">
+                                <div class="bg-gray-50 p-3 rounded-lg border border-gray-200 text-center">
+                                    <span class="block text-xs text-gray-500 uppercase font-bold">Aciertos</span>
+                                    <span id="contador-aciertos" class="text-xl font-bold text-green-600">0</span>
+                                </div>
+                                <div class="bg-gray-50 p-3 rounded-lg border border-gray-200 text-center">
+                                    <span class="block text-xs text-gray-500 uppercase font-bold">Errores</span>
+                                    <span id="contador-errores" class="text-xl font-bold text-red-600">0</span>
+                                </div>
+                            </div>
+
+                            <div class="mt-2">
+                                <div class="flex justify-between text-xs font-bold text-gray-500 mb-1">
+                                    <span>Progreso</span>
+                                    <span id="texto-progreso">0%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                    <div id="barra-progreso"
+                                        class="bg-indigo-600 h-2.5 rounded-full transition-all duration-300"
+                                        style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Reto -->
+                        <div id="seccion-reto" class="hidden flex-col gap-4">
+                            <h2 class="text-lg font-bold text-gray-800">Reto Numérico</h2>
+                            <p class="text-sm text-gray-500">Realiza la secuencia de 5 números en orden.</p>
+
+                            <div id="reto-setup">
+                                <button id="btn-iniciar-reto"
+                                    class="w-full py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition">Iniciar
+                                    Reto</button>
+                            </div>
+
+                            <div id="reto-activo" class="hidden flex-col gap-4">
+                                <div
+                                    class="flex justify-between items-center bg-gray-50 p-3 rounded-lg border border-gray-200">
+                                    <span class="text-sm font-bold text-gray-600">Tiempo: <span id="reto-tiempo"
+                                            class="text-indigo-600">0s</span></span>
+                                    <span class="text-sm font-bold text-gray-600">Paso: <span id="reto-paso"
+                                            class="text-indigo-600">1/5</span></span>
+                                </div>
+                                <div class="flex justify-center gap-2" id="reto-secuencia">
+                                    <!-- Secuencia se llena por JS -->
+                                </div>
+                            </div>
+
+                            <div id="reto-resultados"
+                                class="hidden flex-col gap-3 bg-green-50 p-5 rounded-xl border border-green-200 text-center">
+                                <h3 class="text-lg font-bold text-green-700">¡Reto Completado!</h3>
+                                <p class="text-sm text-green-600">Tiempo: <span id="res-tiempo"
+                                        class="font-bold"></span></p>
+                                <p class="text-sm text-green-600">Aciertos: <span id="res-aciertos"
+                                        class="font-bold"></span>/5</p>
+                                <p class="text-sm text-green-600">Puntaje Final: <span id="res-puntaje"
+                                        class="font-bold"></span></p>
+                                <button id="btn-reintentar-reto"
+                                    class="mt-2 px-4 py-2 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition">Intentar
+                                    de nuevo</button>
+                            </div>
+                        </div>
+
+                        <!-- Estadísticas y Historial -->
+                        <div id="seccion-estadisticas" class="hidden flex-col gap-4">
+                            <h2 class="text-lg font-bold text-gray-800">Estadísticas</h2>
+
+                            <div class="grid grid-cols-1 gap-3">
+                                <div
+                                    class="bg-gray-50 p-3 rounded-lg border border-gray-200 flex justify-between items-center">
+                                    <span class="text-sm font-medium text-gray-600">Número más detectado</span>
+                                    <span id="stat-mas-detectado" class="text-lg font-bold text-indigo-600">-</span>
+                                </div>
+                                <div
+                                    class="bg-gray-50 p-3 rounded-lg border border-gray-200 flex justify-between items-center">
+                                    <span class="text-sm font-medium text-gray-600">Total detectados</span>
+                                    <span id="stat-total-detectados" class="text-lg font-bold text-indigo-600">0</span>
+                                </div>
+                                <div
+                                    class="bg-gray-50 p-3 rounded-lg border border-gray-200 flex justify-between items-center">
+                                    <span class="text-sm font-medium text-gray-600">Prácticas realizadas</span>
+                                    <span id="stat-total-practicas" class="text-lg font-bold text-indigo-600">0</span>
+                                </div>
+                            </div>
+
+                            <h3 class="text-md font-bold text-gray-800 mt-2">Historial Reciente</h3>
+                            <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
+                                <ul id="historial-lista" class="divide-y divide-gray-100">
+                                    <li class="p-3 text-sm text-gray-500 text-center">Aún no hay detecciones</li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -49,6 +171,7 @@
 
     <script src="components/sidebar.js"></script>
     <script src="js/script.js"></script>
+    <script src="js/numeros.js"></script>
     <script>
         loadSidebar('numeros');
         setMode('numbers');
