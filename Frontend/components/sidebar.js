@@ -3,9 +3,11 @@ function loadSidebar(activePage) {
     if (!sidebar) return;
 
     const pages = [
-        { href: 'index.html', label: 'Traductor en Vivo', id: 'traductor' },
+        { href: 'index.html', label: 'Inicio', id: 'inicio' },
         { href: 'abecedario.html', label: 'Abecedario', id: 'abecedario' },
         { href: 'numeros.html', label: 'Números', id: 'numeros' },
+        { href: 'frases.html', label: 'Frases', id: 'frases' },
+        { href: '#', label: 'Incidencias', id: 'incidencias' },
     ];
 
     const links = pages.map(p => {
