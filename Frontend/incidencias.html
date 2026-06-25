@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SignApp - Reportar Incidencia</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 text-gray-800">
+    <div class="flex min-h-screen">
+        <aside id="sidebar" class="w-56 bg-white border-r border-gray-200 flex flex-col fixed h-full"></aside>
+
+        <main class="ml-56 flex-1 p-8">
+            <div class="max-w-2xl mx-auto bg-white rounded-xl border border-gray-200 p-8 shadow-sm">
+                <h1 class="text-2xl font-bold mb-2">Reportar una Incidencia</h1>
+                <p class="text-gray-500 text-sm mb-6">Ayúdanos a mejorar detallando el problema que encontraste en la
+                    aplicación.</p>
+
+                <form id="form-incidencia" class="space-y-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
+                            <input type="text" id="inc-nombre" required
+                                class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Correo (Opcional)</label>
+                            <input type="email" id="inc-correo"
+                                class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Tipo de Incidencia</label>
+                        <select id="inc-tipo"
+                            class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition bg-white">
+                            <option>Error de detección</option>
+                            <option>Problema de cámara</option>
+                            <option>Error visual</option>
+                            <option>Error de rendimiento</option>
+                            <option>Otro</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Descripción del problema</label>
+                        <textarea id="inc-descripcion" rows="4" required
+                            class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition resize-none"></textarea>
+                    </div>
+
+                    <div id="inc-mensaje" class="hidden p-3 rounded-lg text-sm font-medium text-center"></div>
+
+                    <button type="submit"
+                        class="w-full bg-indigo-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-indigo-700 transition">
+                        Enviar Incidencia
+                    </button>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <script src="components/sidebar.js"></script>
+    <script src="js/incidencias.js"></script>
+    <script>
+        loadSidebar('incidencias');
+    </script>
+</body>
+
+</html>
