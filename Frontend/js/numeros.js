@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Tabs
+
     const tabs = ['aprender', 'practicar', 'reto', 'estadisticas'];
     tabs.forEach(tab => {
         document.getElementById(`tab-${tab}`).addEventListener('click', () => {
@@ -16,7 +16,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Estado global
     let state = {
         aciertos: 0,
         errores: 0,
@@ -26,11 +25,9 @@ document.addEventListener('DOMContentLoaded', () => {
         totalDetectados: 0,
         practicasRealizadas: 0,
 
-        // Práctica
         numeroActual: null,
         practicaActiva: false,
 
-        // Reto
         retoActivo: false,
         retoSecuencia: [],
         retoPaso: 0,
@@ -39,7 +36,6 @@ document.addEventListener('DOMContentLoaded', () => {
         retoAciertos: 0
     };
 
-    // DOM Elements
     const btnNuevoNumero = document.getElementById('btn-nuevo-numero');
     const numeroSolicitado = document.getElementById('numero-solicitado');
     const resultadoPractica = document.getElementById('resultado-practica');
@@ -49,12 +45,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const barraProgreso = document.getElementById('barra-progreso');
     const historialLista = document.getElementById('historial-lista');
 
-    // Stats
     const statMasDetectado = document.getElementById('stat-mas-detectado');
     const statTotalDetectados = document.getElementById('stat-total-detectados');
     const statTotalPracticas = document.getElementById('stat-total-practicas');
 
-    // Reto elements
     const btnIniciarReto = document.getElementById('btn-iniciar-reto');
     const btnReintentarReto = document.getElementById('btn-reintentar-reto');
     const retoSetup = document.getElementById('reto-setup');
@@ -64,7 +58,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const retoPaso = document.getElementById('reto-paso');
     const retoSecuenciaCont = document.getElementById('reto-secuencia');
 
-    // Funciones Helper
     const getRandomNumber = () => Math.floor(Math.random() * 11).toString();
 
     const actualizarProgreso = () => {
@@ -80,7 +73,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         statTotalDetectados.innerText = state.totalDetectados;
 
-        // Calcular más detectado
         let maxNum = '-';
         let maxCount = 0;
         for (let n in state.conteoNumeros) {
@@ -91,8 +83,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         statMasDetectado.innerText = maxNum;
 
-        // Historial
-        // No añadir duplicados consecutivos
         if (state.historial.length === 0 || state.historial[0] !== num) {
             state.historial.unshift(num);
             if (state.historial.length > 10) state.historial.pop();
@@ -116,7 +106,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     btnNuevoNumero.addEventListener('click', iniciarPractica);
 
-    // Reto logic
     const renderSecuencia = () => {
         retoSecuenciaCont.innerHTML = state.retoSecuencia.map((n, i) => {
             let color = 'bg-white text-gray-400 border-gray-200';
@@ -168,7 +157,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('res-puntaje').innerText = puntaje;
     };
 
-    // Observer para la detección
     const gestureDisplay = document.getElementById('gesture-display');
     let lastDetectedTime = 0;
 
@@ -176,28 +164,52 @@ document.addEventListener('DOMContentLoaded', () => {
         mutations.forEach((mutation) => {
             if (mutation.type === 'childList') {
                 const detected = gestureDisplay.innerText;
-                // Exclude invalid states
+
                 if (detected !== "..." && detected !== "Detectando..." && detected !== "Ninguno" && detected !== "Detectando número...") {
 
                     const now = Date.now();
-                    if (now - lastDetectedTime < 1500) return; // Debounce
+                    if (now - lastDetectedTime < 1500) return;
                     lastDetectedTime = now;
 
                     actualizarEstadisticas(detected);
 
-                    // Modo Práctica
                     if (state.practicaActiva && document.getElementById('seccion-practicar').classList.contains('flex')) {
                         state.totalIntentos++;
                         if (detected === state.numeroActual) {
-                            resultadoPractica.innerText = '✓ Correcto';
+                            resultadoPractica.innerText = 'Correcto';
                             resultadoPractica.className = 'h-8 text-lg font-bold text-green-600';
+
+                            if (typeof confetti === 'function') {
+                                confetti({
+                                    particleCount: 100,
+                                    spread: 70,
+                                    origin: { y: 0.6 }
+                                });
+                            }
+
+                            try {
+                                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                                const oscillator = audioCtx.createOscillator();
+                                const gainNode = audioCtx.createGain();
+                                oscillator.connect(gainNode);
+                                gainNode.connect(audioCtx.destination);
+                                oscillator.type = 'sine';
+                                oscillator.frequency.setValueAtTime(880, audioCtx.currentTime);
+                                oscillator.frequency.exponentialRampToValueAtTime(1760, audioCtx.currentTime + 0.1);
+                                gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+                                gainNode.gain.linearRampToValueAtTime(0.5, audioCtx.currentTime + 0.05);
+                                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+                                oscillator.start(audioCtx.currentTime);
+                                oscillator.stop(audioCtx.currentTime + 0.5);
+                            } catch (e) { }
+
                             state.aciertos++;
                             state.practicasRealizadas++;
                             statTotalPracticas.innerText = state.practicasRealizadas;
-                            state.practicaActiva = false; // Espera nuevo número
-                            setTimeout(iniciarPractica, 2000); // Auto nuevo numero
+                            state.practicaActiva = false;
+                            setTimeout(iniciarPractica, 2000);
                         } else {
-                            resultadoPractica.innerText = '✗ Incorrecto';
+                            resultadoPractica.innerText = 'Incorrecto';
                             resultadoPractica.className = 'h-8 text-lg font-bold text-red-600';
                             state.errores++;
                         }
@@ -207,7 +219,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         actualizarProgreso();
                     }
 
-                    // Modo Reto
                     if (state.retoActivo && document.getElementById('seccion-reto').classList.contains('flex')) {
                         const target = state.retoSecuencia[state.retoPaso];
                         if (detected === target) {
@@ -231,6 +242,5 @@ document.addEventListener('DOMContentLoaded', () => {
         observer.observe(gestureDisplay, { childList: true, subtree: true, characterData: true });
     }
 
-    // Init
     iniciarPractica();
 });
